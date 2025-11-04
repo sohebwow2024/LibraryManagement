@@ -30,9 +30,21 @@ input::placeholder {
 .input-group input {
   background-color: transparent;
 }
-.submit-button button{
+.submit-button button {
   border: 0.5px solid #d8d8d8;
 }
-.download-label label{
-  font-size: 16px ;
+.download-label label {
+  font-size: 16px;
+}
+.react-datepicker {
+  margin-left: 60px;
+}
+.student-list .btn:hover {
+  border: 0.5px solid #d8d8d8;
+}
+.student-list .btn:active {
+  background-color: #d8d8d8;
+}
+.css-99a237{
+  background: linear-gradient(195deg, #42424a, #191919) !important;
 }

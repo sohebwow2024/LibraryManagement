@@ -35,6 +35,8 @@ import MDInput from "components/MDInput";
 // Material Dashboard 2 React example components
 import Breadcrumbs from "examples/Breadcrumbs";
 import NotificationItem from "examples/Items/NotificationItem";
+import MDTypography from "components/MDTypography";
+import Switch from "@mui/material/Switch";
 
 // Custom styles for DashboardNavbar
 import {
@@ -51,6 +53,7 @@ import {
   setTransparentNavbar,
   setMiniSidenav,
   setOpenConfigurator,
+  setDarkMode
 } from "context";
 
 function DashboardNavbar({ absolute, light, isMini }) {
@@ -59,6 +62,8 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
+  const handleDarkMode = () => setDarkMode(dispatch, !darkMode);
+console.log("setDarkMode",darkMode);
 
   useEffect(() => {
     // Setting the navbar type
@@ -135,8 +140,13 @@ function DashboardNavbar({ absolute, light, isMini }) {
         </MDBox>
         {isMini ? null : (
           <MDBox sx={(theme) => navbarRow(theme, { isMini })}>
-            <MDBox pr={1}>
+            {/* <MDBox pr={1}>
               <MDInput label="Search here" />
+            </MDBox> */}
+            <MDBox display="flex" justifyContent="space-between" alignItems="center" lineHeight={1}>
+              <MDTypography variant="h6">{darkMode === true  ? "Dark" : "Light" }</MDTypography>
+
+              <Switch checked={darkMode} onChange={handleDarkMode} />
             </MDBox>
             <MDBox color={light ? "white" : "inherit"}>
               <Link to="/authentication/sign-in/basic">
@@ -155,7 +165,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                   {miniSidenav ? "menu_open" : "menu"}
                 </Icon>
               </IconButton>
-              <IconButton
+              {/* <IconButton
                 size="small"
                 disableRipple
                 color="inherit"
@@ -163,7 +173,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
                 onClick={handleConfiguratorOpen}
               >
                 <Icon sx={iconsStyle}>settings</Icon>
-              </IconButton>
+              </IconButton> */}
               <IconButton
                 size="small"
                 disableRipple

@@ -32,6 +32,7 @@ const routes = [
     route: "/billing",
     component: <Billing />,
   },
+  
   {
     type: "collapse",
     name: "BULK Upload",

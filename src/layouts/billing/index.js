@@ -147,7 +147,7 @@ function Billing() {
 </div>
                  
                 </Row>
-<div className="submit-button">
+<div className="submit-button d-flex justify-content-center">
 <Button type="submit" variant="primary">
                   Submit
                 </Button>
