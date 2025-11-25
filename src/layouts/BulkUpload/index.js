@@ -18,31 +18,65 @@ import projectsTableData from "layouts/tables/data/projectsTableData";
 import ReactSelect from "react-select";
 import { Button } from "react-bootstrap";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import MDButton from "components/MDButton";
+import { Link } from "react-router-dom";
+import DownloadIcon from "@mui/icons-material/Download";
+import Swal from "sweetalert2";
+import ExcelFile from "../../layouts/Librarybooks.xlsx";
 
 function BulkUpload() {
-  const { columns, rows } = authorsTableData();
-  const { columns: pColumns, rows: pRows } = projectsTableData();
+ 
+	const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState(null);
+  const [isDownloading, setisDownloading] = useState(false);
+  const [message, setMessage] = useState("");
   console.log("Unsaved ");
-  const UnSavedJob = async () => {
+
+  const handleFile = (e) => {
+   
+    setFile(e.target.files[0]);
+    if (file) {
+			setFileName(file.name);
+		}
+  };
+
+  const uploadExcel = async () => {
+    setisDownloading(true);
+    // if (!file) {
+    //   alert("Please upload an Excel file");
+    //   return;
+    // }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
     try {
-      await axios
-        .get("https://library-management-s4mr.onrender.com/librarybooks")
-        .then((resData) => {
-          console.log("UnSaved job", resData);
-        });
-    } catch (e) {
-      if (e.response && e.response.status === 404) {
-        // toast.error(e.response.data.message);
-        console.log("Unsaved ");
-      } else {
-        // toast.error(e.response.data.message);
-      }
+      const res = await axios.post(
+        "https://library-management-s4mr.onrender.com/bulkupload",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      Swal.fire(res.data.message, "", "success");
+      setisDownloading(false);
+      console.log("message", res.data.message);
+
+      setMessage(res.data.message);
+    } catch (err) {
+      console.log(err);
+      alert("Bulk upload failed");
     }
   };
-  useEffect(() => {
-    UnSavedJob();
-  }, []);
+
+ 
+
+  const downloadDummyExcel = () => {
+		const link = document.createElement("a");
+		link.href = ExcelFile;
+		link.download = fileName;
+		link.click();
+	};
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -54,22 +88,12 @@ function BulkUpload() {
               <div className="row">
                 <div className="col-md-6">
                   <div className="pt-3 ">
-                    <div className="download-label ms-4">
+                    <div className="download-label ms-4 mb-3">
                       <label htmlFor="">You can upload multiple books </label>
                     </div>
 
                     <div className="d-flex justify-content-center">
-                      <input
-                        type="file"
-                        accept=".xlsx,.xls"
-                        // onChange={handleFileUpload}
-                        style={{
-                          marginTop: "15px",
-                          padding: "5px 10px",
-                          borderRadius: "5px",
-                          cursor: "pointer",
-                        }}
-                      />
+                      <input type="file" accept=".xlsx,.xls" onChange={handleFile} />
                     </div>
                   </div>
                 </div>
@@ -98,21 +122,24 @@ function BulkUpload() {
 							
 						</Button> */}
 
-                  <div className="khojPrimaryBtn ms-3" style={{ height: "40px", width: "120px" }}>
-                    {/* <a href="#/" onClick={uploadFile}
-								className={`btn ${!formChangedBulk  ? "disabled" : "enabled"}`}
-								style={{ pointerEvents: formChangedBulk ? "auto" : "none", border: "none" }}
-							>
-								<span>{isDownloading ? "Uploading" : "Upload"}</span>
-								{isDownloading && <span className="loader"></span>}
-							</a> */}
+                  <div className="uploadBtn ms-3">
+                    <button href="#/" onClick={uploadExcel}>
+                      <span>{isDownloading ? "Uploading" : "Upload"}</span>
+                      {isDownloading && <span className="loader"></span>}
+                    </button>
+
+                    {/* <div className="uploadBtn mt-3 text-center">
+                      <button onClick={uploadExcel}>Upload</button>
+                    </div> */}
                   </div>
                 </div>
               </div>
               <hr />
 
               <div className="d-flex justify-content-center align-items-baseline">
-                <p className="text-center mb-2">Download reference file</p>
+                <p className="downloadText text-center mb-2" onClick={downloadDummyExcel}>
+                  Download reference file <DownloadIcon />
+                </p>
                 {/* <div className="col-md-3">
 						<div className="khoDwnlodBtn ms-3">
 							<p

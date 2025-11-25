@@ -33,6 +33,10 @@ input::placeholder {
 .submit-button button {
   border: 0.5px solid #d8d8d8;
 }
+.submit-button button:hover {
+  background-color: gray;
+  color: #fff;
+}
 .download-label label {
   font-size: 16px;
 }
@@ -45,6 +49,72 @@ input::placeholder {
 .student-list .btn:active {
   background-color: #d8d8d8;
 }
-.css-99a237{
+.css-99a237 {
   background: linear-gradient(195deg, #42424a, #191919) !important;
+}
+
+/* Soheb css  */
+
+.css-aim41u {
+  /* margin-left: 0 !important; */
+  /* padding-bottom: 256px !important; */
+  /* margin-left: -0.875rem !important; */
+}
+.logout-icon .MuiSvgIcon-root {
+  cursor: pointer;
+}
+
+.test {
+  background: url("../../assets//images/books/pngtree-an-old-bookcase-in-a-library-picture-image_2760144.jpg");
+}
+
+/* Books */
+
+.add-book {
+  width: 120px;
+  height: 40px;
+  font-size: 16px;
+  background-color: #8c8c8c;
+  border-radius: 13px;
+  padding: 7px 16px;
+}
+.add-book a {
+  color: #fff;
+}
+.uploadBtn button {
+  width: 140px;
+  /* height: 40px; */
+  font-size: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 7px 16px;
+  border: none;
+  color: #8c8c8c;
+  border: 0.5px solid #d8d8d8;
+}
+.downloadText {
+  cursor: pointer;
+}
+.dec-text {
+  font-size: 14px;
+}
+.dec-text textarea::placeholder {
+  font-size: 14px;
+}
+.form-control {
+  font-size: 14px;
+}
+.MuiBox-root .css-14x1f45 {
+  display: none;
+}
+.badge {
+  width: 75px;
+  height: 30px;
+  border-radius: 6px;
+  /* background: linear-gradient(195deg, #66bb6a, #43a047); */
+  font-size: 14px;
+  font-style: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

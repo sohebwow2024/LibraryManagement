@@ -37,6 +37,8 @@ import Breadcrumbs from "examples/Breadcrumbs";
 import NotificationItem from "examples/Items/NotificationItem";
 import MDTypography from "components/MDTypography";
 import Switch from "@mui/material/Switch";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import { useNavigate } from "react-router-dom";
 
 // Custom styles for DashboardNavbar
 import {
@@ -53,8 +55,9 @@ import {
   setTransparentNavbar,
   setMiniSidenav,
   setOpenConfigurator,
-  setDarkMode
+  setDarkMode,
 } from "context";
+import axios from "axios";
 
 function DashboardNavbar({ absolute, light, isMini }) {
   const [navbarType, setNavbarType] = useState();
@@ -62,8 +65,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
   const [openMenu, setOpenMenu] = useState(false);
   const route = useLocation().pathname.split("/").slice(1);
+  const navigate = useNavigate();
+
   const handleDarkMode = () => setDarkMode(dispatch, !darkMode);
-console.log("setDarkMode",darkMode);
+  console.log("setDarkMode", darkMode);
 
   useEffect(() => {
     // Setting the navbar type
@@ -128,6 +133,32 @@ console.log("setDarkMode",darkMode);
     },
   });
 
+  const handleLogout = async () => {
+    try {
+      // Backend logout API call
+      const response = await axios.post(
+        "https://library-management-s4mr.onrender.com/signoutlibrary"
+      );
+
+      // Clear local storage / tokens
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+
+      if (response.data.success) {
+        console.log("✅ Logged out successfully!");
+      } else {
+        console.warn("⚠️ Logout failed on server, local session cleared!");
+      }
+
+      // Redirect to login page
+      navigate("/LibSignIn");
+    } catch (error) {
+      console.error("Logout Error:", error);
+      alert("⚠️ Something went wrong during logout!");
+      navigate("/LibSignIn");
+    }
+  };
+
   return (
     <AppBar
       position={absolute ? "absolute" : navbarType}
@@ -144,28 +175,27 @@ console.log("setDarkMode",darkMode);
               <MDInput label="Search here" />
             </MDBox> */}
             <MDBox display="flex" justifyContent="space-between" alignItems="center" lineHeight={1}>
-              <MDTypography variant="h6">{darkMode === true  ? "Dark" : "Light" }</MDTypography>
+              <MDTypography variant="h6">{darkMode === true ? "Dark" : "Light"}</MDTypography>
 
               <Switch checked={darkMode} onChange={handleDarkMode} />
             </MDBox>
             <MDBox color={light ? "white" : "inherit"}>
-              <Link to="/authentication/sign-in/basic">
-                <IconButton sx={navbarIconButton} size="small" disableRipple>
-                  <Icon sx={iconsStyle}>account_circle</Icon>
-                </IconButton>
-              </Link>
-              <IconButton
-                size="small"
-                disableRipple
-                color="inherit"
-                sx={navbarMobileMenu}
-                onClick={handleMiniSidenav}
-              >
-                <Icon sx={iconsStyle} fontSize="medium">
-                  {miniSidenav ? "menu_open" : "menu"}
-                </Icon>
-              </IconButton>
-              {/* <IconButton
+              <div className="d-flex">
+                <div>
+                  <IconButton
+                    size="small"
+                    disableRipple
+                    color="inherit"
+                    sx={navbarMobileMenu}
+                    onClick={handleMiniSidenav}
+                  >
+                    <Icon sx={iconsStyle} fontSize="medium">
+                      {miniSidenav ? "menu_open" : "menu"}
+                    </Icon>
+                  </IconButton>
+                </div>
+
+                {/* <IconButton
                 size="small"
                 disableRipple
                 color="inherit"
@@ -174,18 +204,35 @@ console.log("setDarkMode",darkMode);
               >
                 <Icon sx={iconsStyle}>settings</Icon>
               </IconButton> */}
-              <IconButton
-                size="small"
-                disableRipple
-                color="inherit"
-                sx={navbarIconButton}
-                aria-controls="notification-menu"
-                aria-haspopup="true"
-                variant="contained"
-                onClick={handleOpenMenu}
-              >
-                <Icon sx={iconsStyle}>notifications</Icon>
-              </IconButton>
+                <div>
+                  <IconButton
+                    size="small"
+                    disableRipple
+                    color="inherit"
+                    sx={navbarIconButton}
+                    aria-controls="notification-menu"
+                    aria-haspopup="true"
+                    variant="contained" 
+                    onClick={handleOpenMenu}
+                  >
+                    <Icon sx={iconsStyle}>notifications</Icon>
+                  </IconButton>
+                </div>
+
+                {/* <Link to="/SignIn"> */}
+                <div className="logout-icon">
+                  <PowerSettingsNewIcon
+                    lg={navbarIconButton}
+                    size="small"
+                    disableRipple
+                    onClick={handleLogout}
+                  >
+                    {/* <PowerSettingsNewIcon sx={iconsStyle}>account_circle</Icon> */}
+                  </PowerSettingsNewIcon>
+                </div>
+              </div>
+
+              {/* </Link> */}
               {renderMenu()}
             </MDBox>
           </MDBox>

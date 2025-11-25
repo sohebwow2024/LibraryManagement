@@ -143,7 +143,11 @@ function Configurator() {
             See our dashboard options.
           </MDTypography>
         </MDBox> */}
-
+        <Icon>
+          <MDTypography>
+            <h2>Hello sohen</h2>
+          </MDTypography>
+        </Icon>
         <Icon
           sx={({ typography: { size }, palette: { dark, white } }) => ({
             fontSize: `${size.lg} !important`,
